@@ -57,6 +57,7 @@
     "node-cache": "^5.1.1",
     "node-fetch": "2.6.7",
     "rhino3dm": "0.13.0",
+    "start": "^5.1.0",
     "throng": "4.0.0"
   },
   "devDependencies": {
