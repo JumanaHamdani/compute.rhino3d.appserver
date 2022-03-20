@@ -18,9 +18,6 @@ const length_slider = document.getElementById("length");
 length_slider.addEventListener("mouseup", onSliderChange, false);
 length_slider.addEventListener("touchend", onSliderChange, false);
 
-const height_slider = document.getElementById("height");
-height_slider.addEventListener("mouseup", onSliderChange, false);
-height_slider.addEventListener("touchend", onSliderChange, false);
 
 const seed_value_slider = document.getElementById("seed_value");
 seed_value_slider.addEventListener("mouseup", onSliderChange, false);
@@ -33,6 +30,12 @@ let rhino, definition, doc;
 rhino3dm().then(async (m) => {
   console.log("Loaded rhino3dm.");
   rhino = m; // global
+
+//Set up run and download buttons
+
+const downloadButton = document.getElementById("downloadButton")
+downloadButton.onclick = download 
+
 
   //RhinoCompute.url = getAuth( 'RHINO_COMPUTE_URL' ) // RhinoCompute server url. Use http://localhost:8081 if debugging locally.
   //RhinoCompute.apiKey = getAuth( 'RHINO_COMPUTE_KEY' )  // RhinoCompute server api key. Leave blank if debugging locally.
@@ -59,10 +62,7 @@ async function compute() {
   const param2 = new RhinoCompute.Grasshopper.DataTree("length");
   param2.append([0], [length_slider.valueAsNumber]);
 
-  const param3 = new RhinoCompute.Grasshopper.DataTree("height");
-  param3.append([0], [height_slider.valueAsNumber]);
-
-  const param4 = new RhinoCompute.Grasshopper.DataTree("seed value");
+  const param3 = new RhinoCompute.Grasshopper.DataTree("seed value");
   param3.append([0], [seed_value_slider.valueAsNumber]);
 
 
@@ -71,7 +71,6 @@ async function compute() {
   trees.push(param1);
   trees.push(param2);
   trees.push(param3);
-  trees.push(param4);
 
 
   const res = await RhinoCompute.Grasshopper.evaluateDefinition(
@@ -160,36 +159,41 @@ function onSliderChange() {
 }
 
 
-// THREE BOILERPLATE //
-let scene, camera, renderer, controls;
+
+
+// BOILERPLATE //
+
+let scene, camera, renderer, controls
 
 function init() {
-  // create a scene and a camera
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(1, 1, 1);
-  camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-  camera.position.z = -30;
 
-  // create the renderer and add it to the html
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+    // Rhino models are z-up, so set this as the default
+    THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 0, 1 );
 
-  // add some controls to orbit the camera
-  controls = new OrbitControls(camera, renderer.domElement);
+    // create a scene and a camera
+    scene = new THREE.Scene()
+    scene.background = new THREE.Color(1,1,1)
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000)
+    camera.position.x = - 50
+    camera.position.y = - 50
+    camera.position.z = - 50
 
-  // add a directional light
-  const directionalLight = new THREE.DirectionalLight(0xffffff);
-  directionalLight.intensity = 2;
-  scene.add(directionalLight);
+    // create the renderer and add it to the html
+    renderer = new THREE.WebGLRenderer({ antialias: true }) //alpha: true to set transparent background
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    document.body.appendChild(renderer.domElement)
 
-  const ambientLight = new THREE.AmbientLight();
-  scene.add(ambientLight);
+    // add some controls to orbit the camera
+    controls = new OrbitControls(camera, renderer.domElement)
+
+    // add a directional light
+    const directionalLight = new THREE.DirectionalLight(0xffffff)
+    directionalLight.intensity = 5
+    scene.add(directionalLight)
+    
+
+    const ambientLight = new THREE.AmbientLight()
+    scene.add(ambientLight)
 
   animate();
 }
@@ -211,3 +215,13 @@ function meshToThreejs(mesh, material) {
   const geometry = loader.parse(mesh.toThreejsJSON());
   return new THREE.Mesh(geometry, material);
 }
+
+//Download button
+function download (){
+  let buffer = doc.toByteArray()
+  let blob = new Blob([ buffer ], { type: "application/octect-stream" })
+  let link = document.createElement('a')
+  link.href = window.URL.createObjectURL(blob)
+  link.download = 'pavilion.3dm'
+  link.click()
+  }

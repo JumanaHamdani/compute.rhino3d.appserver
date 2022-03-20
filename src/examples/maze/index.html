@@ -35,9 +35,9 @@
             }
             .button {
             border-radius: 8px;
-            background-color: #08458b;
+            background-color: #083c8a;
             border: none;
-            color: #dbdbdb;
+            color: #FFFFFF;
             text-align: center;
             font-size: 10PX;
             padding: 15px;
@@ -73,6 +73,36 @@
             }   
             
             
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #0445a7;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #023075;
+  cursor: pointer;
+}
         
         
         </style>
@@ -92,27 +122,24 @@
                         
                         <div>
                             <label for="width">width</label>
-                            <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-  <p>Value: <span id="demo"></span></p>
-                        
+                            <input type="range" id="width" name="width" min="1" max="10" value="8" step="1" class="slider">
+                            <span id="modVal"></span><br>
                         </div>
+
                         <div>
                             <label for="length">length</label>
-                            <input type="range" id="length" name="length" min="1" max="10" value="8" step="1">
-                        </div>
-                        <div>
-                            <label for="height">height</label>
-                            <input type="range" id="height" name="height" min="1" max="9" value="6" step="1">
+                            <input type="range" id="length" name="length" min="1" max="10" value="8" step="1" class="slider">
+                            <p>length: <span id="demoL"></span></p>
                         </div>
                     <p id="edge">Pattern</p>
                         <div>
                             <label for="seed_value">seed value</label>
-                            <input type="range" id="seed_value" name="seed_value" min="1" max="10" value="8" step="1">
+                            <input type="range" id="seed_value" name="seed_value" min="1" max="10" value="8" step="1" step="1" class="slider">
                         
                         </div>
                         </div>
                         
-                             <button class="button"><span>Download your Pavilion </span></button>
+                             <button class="button" id="downloadButton"><span>Download your Pavilion </span></button>
                         </div>
                 </div>
 
